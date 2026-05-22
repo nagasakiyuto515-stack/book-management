@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書籍管理</title>
+    <style>
+    .invalid-feedback {
+        display: block;
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    .form-control.is-invalid:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+</style>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- HTML内に追加 -->
+
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">書籍管理システム</h1>
+
+        <!-- 登録フォーム -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">書籍を登録</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/books/create}" th:object="${bookForm}" method="post">
+                    <div class="mb-3">
+    <label for="title" class="form-label">タイトル</label>
+    <input type="text" class="form-control" id="title" th:field="*{title}" 
+           th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" /> <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+</div>
+
+<div class="mb-3">
+    <label for="author" class="form-label">著者</label>
+    <input type="text" class="form-control" id="author" th:field="*{author}" 
+           th:classappend="${#fields.hasErrors('author')} ? 'is-invalid'" /> <div class="invalid-feedback" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
+</div>
+
+<div class="mb-3">
+    <label for="isbn" class="form-label">ISBN</label>
+    <input type="text" class="form-control" id="isbn" th:field="*{isbn}" 
+           th:classappend="${#fields.hasErrors('isbn')} ? 'is-invalid'" /> <div class="invalid-feedback" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}"></div>
+</div>
+
+<div class="mb-3">
+    <label for="price" class="form-label">価格</label>
+    <input type="number" class="form-control" id="price" th:field="*{price}" 
+           th:classappend="${#fields.hasErrors('price')} ? 'is-invalid'" /> <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+</div>
+
+                    <button type="submit" class="btn btn-primary">登録</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 一覧表示 -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">登録済み書籍</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>タイトル</th>
+                            <th>著者</th>
+                            <th>ISBN</th>
+                            <th>価格</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="book : ${books}">
+                            <td th:text="${book.title}"></td>
+                            <td th:text="${book.author}"></td>
+                            <td th:text="${book.isbn}"></td>
+                            <td th:text="${book.price}"></td>
+                            <td>
+                                <a th:href="@{/books/edit(id=${book.id})}" class="btn btn-sm btn-warning">編集</a>
+                                <form th:action="@{/books/delete(id=${book.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">削除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
