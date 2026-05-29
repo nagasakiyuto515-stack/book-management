@@ -2,13 +2,13 @@ package com.example.book_management.controller;
 
 import com.example.form.BookForm;
 import com.example.book_management.model.Book;
-import com.example.book_management.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import com.example.book_management.service.BookService;
 
 @Controller
 @RequestMapping("/books")
@@ -28,12 +28,10 @@ public class BookController {
     @PostMapping("/create")
     public String createBook(@Valid @ModelAttribute BookForm bookForm, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            // バリデーションエラーがある場合、一覧画面に戻す
             model.addAttribute("books", bookService.getAllBooks());
             return "books";
         }
 
-        // バリデーション成功時、Bookオブジェクトに変換して保存
         Book book = new Book();
         book.setTitle(bookForm.getTitle());
         book.setAuthor(bookForm.getAuthor());
@@ -65,12 +63,10 @@ public class BookController {
     @PostMapping("/edit")
     public String updateBook(@RequestParam Long id, @Valid @ModelAttribute BookForm bookForm, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            // バリデーションエラーがある場合、編集画面に戻す
             model.addAttribute("bookId", id);
             return "edit";
         }
 
-        // バリデーション成功時、書籍を更新
         Book bookDetails = new Book();
         bookDetails.setTitle(bookForm.getTitle());
         bookDetails.setAuthor(bookForm.getAuthor());
